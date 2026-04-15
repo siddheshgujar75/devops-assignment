@@ -1,0 +1,29 @@
+---
+- name: Setup nginx server
+  hosts: web
+  become: yes
+
+  vars_files:
+    - vars.yml
+
+  tasks:
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Start and enable nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Deploy custom index page
+      template:
+        src: index.html
+        dest: /var/www/html/index.html
